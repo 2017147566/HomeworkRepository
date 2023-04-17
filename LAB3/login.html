@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link href="./main.css" rel="stylesheet" type="text/css" />
+    <title>LAB2 Login</title>
+  </head>
+  <body>
+    <h2>로그인하기</h2>
+    <form>
+      <label for="email">이메일</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+      <br>
+      <label for="password">비밀번호</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      <br>
+      <p>로그인 유지하기</p>
+      <input type="radio" id="유지" name="로그인" value="유지" required>
+      <label for="유지">유지</label>
+      <br>
+      <input type="radio" id="해제" name="로그인" value="해제" required>
+      <label for="해제">해제</label>
+      <br>
+      <button type="submit">로그인하기</button>
+      <button type="button" onclick="location.href='./signup.html' ">회원가입</button>
+    </form>
+  </body>
+</html>
