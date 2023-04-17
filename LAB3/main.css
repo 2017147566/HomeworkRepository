@@ -66,3 +66,94 @@ form button {
     font-size: 16px;
     margin-top: 30px;
     }
+
+
+
+header {
+	background-color: #333;
+	color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+}
+
+.header-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 1020px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+nav ul {
+	list-style: none;
+	display: flex;
+	align-items: center;
+}
+
+nav ul li {
+	margin-right: 20px;
+}
+
+nav ul li:last-child {
+	margin-right: 0;
+}
+
+nav ul li a {
+	color: #fff;
+	text-decoration: none;
+}
+
+/* Animation */
+@keyframes slide {
+	0% {
+		transform: translateX(100%);
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+
+header h1 {
+	animation-name: slide;
+	animation-duration: 2s;
+	animation-fill-mode: forwards;
+}
+
+/* Products */
+section {
+	margin-top: 50px;
+	padding: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	width: 1020px;
+	margin: 0 auto;
+}
+
+.product {
+	position: relative;
+	width: calc(33.33% - 10px);
+	margin-bottom: 20px;
+}
+
+.product-image {
+	display: block;
+	width: 100%;
+	height: auto;
+	transition: transform 2s;
+}
+
+.product:hover .product-image {
+	transform: scale(1.1);
+}
+
+.product-info {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+}
