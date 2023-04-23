@@ -139,24 +139,47 @@ section {
 	position: relative;
 	width: calc(33.33% - 10px);
 	margin-bottom: 20px;
+    margin-top : 250px;
+    display: inline-block;
 }
 
 .product-image {
     margin-top : 30px;
 	display: block;
-	width: 100%;
-	height: auto;
+	width: auto;
+	height: 200px;
 	transition: transform 2s;
+}
+
+.product-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height : 50%;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.product:hover .product-name {
+  opacity: 1;
 }
 
 .product:hover .product-image {
 	transform: scale(1.1);
+    background : rgba(0, 0, 0, 0.2)
 }
 
 .product-info {
-    margin-top: 200;
+    margin-top: 20px;
 	position: absolute;
 	top: 1150;
 	left: 0;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.2);
 }
+
