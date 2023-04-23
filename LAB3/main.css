@@ -76,12 +76,25 @@ header {
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 250px;
+	height: 300px;
 }
 
 .header-container {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
+	width: 1020px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+.nav-container{
+	display: flex;
+    justify-content: flex-start;
+	align-items: center;
+    flex-direction: row;
+    list-style: none;
+    flex-wrap: wrap;
 	align-items: center;
 	width: 1020px;
 	margin: 0 auto;
@@ -126,6 +139,7 @@ header h1 {
 
 /* Products */
 section {
+    display: flex;
 	margin-top: 50px;
 	padding: 20px;
 	display: flex;
@@ -133,13 +147,36 @@ section {
 	justify-content: space-between;
 	width: 1020px;
 	margin: 0 auto;
+    flex-direction: column;
+}
+
+.product-list {
+    display: flex;
+	position: relative;
+    justify-content: space-between;
+	width: 100%;
+    height : 200;
+	margin-bottom: 20px;
+    margin-top : 200px;
+    flex-direction: row;
+}
+
+.product-text {
+    display: flex;
+	position: relative;
+    justify-content: space-between;
+    flex-direction: column;
+	width: 100%;
+	margin-bottom: 20px;
+    margin-top : 300px;
 }
 
 .product {
+    display: flex;
 	position: relative;
 	width: calc(33.33% - 10px);
 	margin-bottom: 20px;
-    margin-top : 250px;
+    margin-top : 50px;
     display: inline-block;
 }
 
@@ -182,4 +219,17 @@ section {
 	left: 0;
 	background-color: rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 480px) { 
+    .nav-container { flex-direction: column; }
+}
+
+@media (min-width: 481px) and (max-width: 800px) { 
+    .product-list { flex-direction: column; }
+}
+
+@media  (min-width: 801px) { 
+    .product-text { flex-direction: row; }
+}
+
 
