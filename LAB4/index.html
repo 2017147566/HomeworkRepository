@@ -45,27 +45,73 @@
                 <option value="asc">낮은 금액순</option>
                 <option value="desc">높은 금액순</option>
             </select>
-            <button onclick="searchWithFilter()">검색하기</button>
+            <button onclick="search()">검색하기</button>
         </div>
 
-        <div id="productContainer">
+        <div id="product">
         </div>
     </main>
 
 <script>
     const pageSize = 4;
     let page = 1;
-    let isLoading = false;
 
-    function searchWithFilter() {
-        const productContainer = document.getElementById('productContainer');
-        productContainer.innerHTML = '';
-        page = 1;
+    function getInfos(tile, product) {
+        const infos = document.createElement('div');
+        infos.classList.add('product-infos');
 
-        fetchProductWithFilter()
+        const title = document.createElement('h3');
+        title.textContent = product.title;
+        infos.appendChild(title);
+
+        const price = document.createElement('p');
+        price.textContent = `${product.price}원`;
+        infos.appendChild(price);
+
+        const descriptionText = document.createElement('p');
+        descriptionText.textContent = product.text;
+        infos.appendChild(descriptionText);
+
+        if (tile.classList.contains('active')) {
+            tile.classList.remove('active');
+            tile.removeChild(tile.lastChild);
+        } else {
+            const activeTile = document.querySelector('.product.active');
+            if (activeTile) {
+                activeTile.classList.remove('active');
+                activeTile.removeChild(activeTile.lastChild);
+            }
+
+            tile.classList.add('active');
+            tile.appendChild(infos);
+        }
     }
 
-    function fetchProductWithFilter() {
+    function creatTitle(product) {
+        const tile = document.createElement('div');
+        tile.classList.add('product');
+
+        const image = document.createElement('img');
+        image.src = product.image;
+        tile.appendChild(image);
+
+        tile.addEventListener('click', () => {
+            getInfos(tile, product);
+        });
+
+        return tile;
+    }
+
+    function getLists(products) {
+        const product = document.getElementById('product');
+
+        products.forEach((elem) => {
+            const productTile = creatTitle(elem);
+            product.appendChild(productTile);
+        });
+    }
+    
+    function getProducts() {
         const searchInput = document.getElementById('search');
         const categorySelect = document.getElementById('category');
         const sortSelect = document.getElementById('sort');
@@ -94,85 +140,34 @@
 
                 if (startIndex < products.length) {
                     const thisPageProducts = products.slice(startIndex, endIndex);
-                    renderProducts(thisPageProducts);
+                    getLists(thisPageProducts);
                 }
-
-                isLoading = false;
 
             })
             .catch(error => console.error('Error:', error));
     }
+    
+    function search() {
+        const product = document.getElementById('product');
+        product.innerHTML = '';
+        page = 1;
 
-    function renderProducts(products) {
-        const productContainer = document.getElementById('productContainer');
-
-        products.forEach(product => {
-            const productTile = createProductTile(product);
-            productContainer.appendChild(productTile);
-        });
-    }
-
-    function createProductTile(product) {
-        const tile = document.createElement('div');
-        tile.classList.add('product');
-
-        const image = document.createElement('img');
-        image.src = product.image;
-        tile.appendChild(image);
-
-        tile.addEventListener('click', () => {
-            toggleProductInfo(tile, product);
-        });
-
-        return tile;
-    }
-
-    function toggleProductInfo(tile, product) {
-        const description = document.createElement('div');
-        description.classList.add('product-info');
-
-        const title = document.createElement('h3');
-        title.textContent = product.title;
-        description.appendChild(title);
-
-        const price = document.createElement('p');
-        price.textContent = `${product.price}원`;
-        description.appendChild(price);
-
-        const descriptionText = document.createElement('p');
-        descriptionText.textContent = product.description;
-        description.appendChild(descriptionText);
-
-        if (tile.classList.contains('active')) {
-            tile.classList.remove('active');
-            tile.removeChild(tile.lastChild);
-        } else {
-            const activeTile = document.querySelector('.product.active');
-            if (activeTile) {
-                activeTile.classList.remove('active');
-                activeTile.removeChild(activeTile.lastChild);
-            }
-
-            tile.classList.add('active');
-            tile.appendChild(description);
-        }
+        getProducts()
     }
 
     function handleScroll() {
-        if (isLoading) return;
 
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
         if (scrollTop + clientHeight >= scrollHeight - 100) {
-            isLoading = true;
-            page++;
-            fetchProductWithFilter();
+            page += 1
+            getProducts();
         }
     }
 
     window.addEventListener('scroll', handleScroll);
 
-    fetchProductWithFilter();
+    getProducts();
 </script>
         
 </body>
