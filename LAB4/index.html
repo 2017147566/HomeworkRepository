@@ -89,11 +89,13 @@
                     products.sort((a, b) => b.price - a.price);
                 }
 
+
+                const newProducts = products;
                 const start = (page - 1) * pageSize;
                 const end = page * pageSize;
 
-                if (startIndex < products.length) {
-                    const thisPageProducts = products.slice(startIndex, endIndex);
+                if (startIndex < newProducts.length) {
+                    const thisPageProducts = newProducts.slice(startIndex, endIndex);
                     renderProducts(thisPageProducts);
                 }
 
