@@ -1,0 +1,96 @@
+{
+  "products": [
+    {
+      "title": "맥북 에어",
+      "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mac-card-40-macbook-air-202110?wid=600&hei=500&fmt=p-jpg&qlt=95&.v=1664576115052",
+      "text": "맥북 에어 13",
+      "category": "mac",
+      "price": 1390000
+    },
+    {
+      "title": "맥북 프로 13",
+      "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mac-card-40-macbook-pro-13-202206?wid=600&hei=500&fmt=p-jpg&qlt=95&.v=1665082744007",
+      "text": "맥북 프로 13",
+      "category": "mac",
+      "price": 1790000
+    },
+    {
+      "title": "아이맥",
+      "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mac-card-40-imac-24-202108?wid=490&hei=500&fmt=jpeg&qlt=95&.v=1625868688000",
+      "text": "아이맥 24",
+      "category": "mac",
+      "price": 1790000
+    },
+    {
+      "title": "맥미니",
+      "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mac-card-40-mac-mini-202301?wid=600&hei=500&fmt=p-jpg&qlt=95&.v=1670549737872",
+      "text": "맥미니",
+      "category": "mac",
+      "price": 850000
+    },
+
+
+
+
+    {
+      "title": "매직마우스",
+      "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MMMQ3?wid=200&hei=200&fmt=jpeg&qlt=95&.v=1645138486301",
+      "text": "매직마우스",
+      "category": "accessories",
+      "price": 119000
+    },
+    {
+      "title": "매직키보드",
+      "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MMMR3KH?wid=200&hei=200&fmt=jpeg&qlt=95&.v=1645719947105",
+      "text": "매직키보드",
+      "category": "accessories",
+      "price": 229000
+    },
+    {
+      "title": "매직트랙패드",
+      "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MMMP3?wid=200&hei=200&fmt=jpeg&qlt=95&.v=1645136899926",
+      "text": "매직트랙패드",
+      "category": "accessories",
+      "price": 175000
+    },
+
+
+
+
+    {
+      "title": "아이폰 14 프로",
+      "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-14-pro-model-unselect-gallery-2-202209?wid=2560&hei=1440&fmt=p-jpg&qlt=80&.v=1660753617559",
+      "text": "아이폰 14 프로",
+      "category": "phone",
+      "price": 1550000
+    },
+    {
+      "title": "아이폰 14",
+      "image": "https://www.apple.com/v/iphone-14/h/images/key-features/features/size/size_yellow__dnv9794q7loy_large.jpg",
+      "text": "아이폰 14",
+      "category": "phone",
+      "price": 1250000
+    },
+    {
+      "title": "아이폰 13",
+      "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-13-model-unselect-gallery-2-202207?wid=2560&hei=1440&fmt=p-jpg&qlt=80&.v=1654893618268",
+      "text": "아이폰 13",
+      "category": "phone",
+      "price": 950000
+    },
+    {
+      "title": "아이폰 se",
+      "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-se-finish-unselect-gallery-1-202207?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1655249921393",
+      "text": "아이폰 se",
+      "category": "phone",
+      "price": 650000
+    },
+    {
+      "title": "아이폰 12",
+      "image": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-12-finish-unselect-gallery-2-202207?wid=2560&hei=1440&fmt=p-jpg&qlt=80&.v=1662129021500",
+      "text": "아이폰 12",
+      "category": "phone",
+      "price": 950000
+    }
+  ]
+}
