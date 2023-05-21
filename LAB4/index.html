@@ -45,69 +45,70 @@
                 <option value="asc">낮은 금액순</option>
                 <option value="desc">높은 금액순</option>
             </select>
-            <button onclick="getProducts()">검색하기</button>
+            <button onclick="searchWithFilter()">검색하기</button>
         </div>
 
-        <div id="products">
-            
+        <div id="productContainer">
         </div>
     </main>
 
 <script>
     const pageSize = 4;
     let page = 1;
+    let isLoading = false;
 
-    function getProducts() {
-        const productContainer = document.getElementById('products');
+    function searchWithFilter() {
+        const productContainer = document.getElementById('productContainer');
         productContainer.innerHTML = '';
         page = 1;
-        
-        try {
-            fetchProduct()
-        } catch (err) {
-            console.log(err)
-        }
+
+        fetchProductWithFilter()
     }
 
-    function fetchProduct() {
-        const search = document.getElementById('search');
-        const category = document.getElementById('category');
-        const sort = document.getElementById('sort');
+    function fetchProductWithFilter() {
+        const searchInput = document.getElementById('search');
+        const categorySelect = document.getElementById('category');
+        const sortSelect = document.getElementById('sort');
+
+        const keyword = searchInput.value.toLowerCase();
+        const category = categorySelect.value.toLowerCase();
+        const sortOption = sortSelect.value.toLowerCase();
 
         fetch('product.json')
             .then(response => response.json())
             .then(data => {
 
-                let products = data.products.filter(product =>
-                    (product.title.includes(search) || product.category.toLowerCase().includes(search)) && product.category.includes(category)
+                let filteredProducts = data.products.filter(product =>
+                    (product.title.toLowerCase().includes(keyword) || product.category.toLowerCase().includes(keyword)) && product.category.toLowerCase().includes(category)
                 );
 
-                if (sort === 'price-asc') {
-                    products.sort((a, b) => a.price - b.price);
-                } else if (sort === 'price-desc') {
-                    products.sort((a, b) => b.price - a.price);
+                if (sortOption === 'price-asc') {
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                } else if (sortOption === 'price-desc') {
+                    filteredProducts.sort((a, b) => b.price - a.price);
                 }
 
+                const products = filteredProducts;
+                const startIndex = (page - 1) * pageSize;
+                const endIndex = page * pageSize;
 
-                const newProducts = products;
-                const start = (page - 1) * pageSize;
-                const end = page * pageSize;
-
-                if (start < newProducts.length) {
-                    const thisPageProducts = newProducts.slice(start, end);
+                if (startIndex < products.length) {
+                    const thisPageProducts = products.slice(startIndex, endIndex);
                     renderProducts(thisPageProducts);
                 }
+
+                isLoading = false;
+
             })
-            .catch((err) => console.log(err));
+            .catch(error => console.error('Error:', error));
     }
 
-
     function renderProducts(products) {
-        const productInfos = document.getElementById('products');
+        const productContainer = document.getElementById('productContainer');
 
         products.forEach(product => {
             const productTile = createProductTile(product);
-            productInfos.appendChild(productTile);
+            productContainer.appendChild(productTile);
         });
     }
 
@@ -134,12 +135,8 @@
         title.textContent = product.title;
         description.appendChild(title);
 
-        // const image = document.createElement('img');
-        // image.src = product.image;
-        // description.appendChild(image);
-
         const price = document.createElement('p');
-        price.textContent = `$${product.price}`;
+        price.textContent = `${product.price}원`;
         description.appendChild(price);
 
         const descriptionText = document.createElement('p');
@@ -161,20 +158,21 @@
         }
     }
 
-    function infiniteScroll() {
+    function handleScroll() {
         if (isLoading) return;
 
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
         if (scrollTop + clientHeight >= scrollHeight - 100) {
-            page += 1;
-            fetchProduct();
+            isLoading = true;
+            page++;
+            fetchProductWithFilter();
         }
     }
 
-    window.addEventListener('scroll', infiniteScroll);
+    window.addEventListener('scroll', handleScroll);
 
-    fetchProduct();
+    fetchProductWithFilter();
 </script>
         
 </body>
