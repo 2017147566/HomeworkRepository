@@ -31,7 +31,7 @@
     <main>
         <div class="find">
             검색하기
-            <input type="text" id = "search" class="searchInput" placeholder="검색하기">
+            <input type="text" id = "search" class="searchArea" placeholder="검색하기">
             카테고리
             <select id = "category">
                 <option value="">모두</option>
@@ -53,16 +53,12 @@
     </main>
 
 <script>
-    const pageSize = 4;
-    let page = 1;
+    const limit = 5;
+    let offset = 0;
 
     function getInfos(tile, product) {
         const infos = document.createElement('div');
         infos.classList.add('product-infos');
-
-        const title = document.createElement('h3');
-        title.textContent = product.title;
-        infos.appendChild(title);
 
         const price = document.createElement('p');
         price.textContent = `${product.price}원`;
@@ -87,59 +83,65 @@
         }
     }
 
-    function creatTitle(product) {
-        const tile = document.createElement('div');
-        tile.classList.add('product');
+    function createProduct(product) {
+        const container = document.createElement('div');
+        container.classList.add('product');
+
+        const title = document.createElement('h3');
+        title.textContent = product.title;
+        container.appendChild(title);
 
         const image = document.createElement('img');
         image.src = product.image;
-        tile.appendChild(image);
+        container.appendChild(image);
 
-        tile.addEventListener('click', () => {
-            getInfos(tile, product);
+        container.addEventListener('click', () => {
+            getInfos(container, product);
         });
 
-        return tile;
+        return container;
     }
 
     function getLists(products) {
         const product = document.getElementById('product');
 
         products.forEach((elem) => {
-            const productTile = creatTitle(elem);
+            const productTile = createProduct(elem);
             product.appendChild(productTile);
         });
     }
     
     function getProducts() {
-        const searchInput = document.getElementById('search');
-        const categorySelect = document.getElementById('category');
-        const sortSelect = document.getElementById('sort');
-
-        const keyword = searchInput.value.toLowerCase();
-        const category = categorySelect.value.toLowerCase();
-        const sortOption = sortSelect.value.toLowerCase();
+        const keyword = document.getElementById('search').value;
+        const category = document.getElementById('category').value;
+        const sort = document.getElementById('sort').value;
 
         fetch('product.json')
             .then(response => response.json())
-            .then(data => {
+            .then((data) => {
 
-                let filteredProducts = data.products.filter(product =>
-                    (product.title.toLowerCase().includes(keyword) || product.category.toLowerCase().includes(keyword)) && product.category.toLowerCase().includes(category)
-                );
-
-                if (sortOption === 'price-asc') {
-                    filteredProducts.sort((a, b) => a.price - b.price);
-                } else if (sortOption === 'price-desc') {
-                    filteredProducts.sort((a, b) => b.price - a.price);
+                let productInfos = data.products;
+                
+                if (sort === 'asc') {
+                    productInfos.sort((a, b) => a.price - b.price);
+                } else if (sort === 'desc') {
+                    productInfos.sort((a, b) => b.price - a.price);
                 }
 
-                const products = filteredProducts;
-                const startIndex = (page - 1) * pageSize;
-                const endIndex = page * pageSize;
+                productInfos = productInfos.filter((product) =>
+                    (product.title.includes(keyword) || product.category.includes(keyword))
+                );
 
-                if (startIndex < products.length) {
-                    const thisPageProducts = products.slice(startIndex, endIndex);
+                productInfos = productInfos.filter((product)=>
+                    product.category.includes(category)
+                );
+
+                const products = productInfos;
+                const start = offset * limit;
+                const end = (offset + 1) * limit;
+
+                if (start < products.length) {
+                    const thisPageProducts = products.slice(start, end);
                     getLists(thisPageProducts);
                 }
 
@@ -150,7 +152,7 @@
     function search() {
         const product = document.getElementById('product');
         product.innerHTML = '';
-        page = 1;
+        offset = 0;
 
         getProducts()
     }
@@ -159,8 +161,8 @@
 
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
-        if (scrollTop + clientHeight >= scrollHeight - 100) {
-            page += 1
+        if (scrollTop + clientHeight >= scrollHeight) {
+            offset += 1
             getProducts();
         }
     }
