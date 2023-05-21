@@ -174,3 +174,46 @@ button {
     width: 150px;
     padding: 5px;
 }
+
+.product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.product img {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+}
+
+.product h3 {
+    margin-top: 10px;
+}
+
+.product p {
+    margin-top: 5px;
+}
+
+/* Styling the infinite scroll loader */
+.loader {
+    text-align: center;
+    margin: 20px;
+}
+
+/* Styling the description section */
+#description {
+    display: none;
+    margin-bottom: 20px;
+}
+
+#description h2 {
+    margin-bottom: 10px;
+}
+
+#description img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+}

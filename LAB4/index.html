@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 	<title>상품</title>
@@ -31,185 +31,153 @@
     <main>
         <div class="find">
             검색하기
-            <input type="text" class="searchInput" placeholder="검색하기">
+            <input type="text" id = "search" class="searchInput" placeholder="검색하기">
             카테고리
-            <select>
+            <select id = "category">
                 <option value="">모두</option>
                 <option value="mac">Mac</option>
                 <option value="phone">IPhone</option>
                 <option value="accessories">Accessories</option>
             </select>
             정렬
-            <select>
+            <select id = "sort" >
                 <option value="">기본</option>
                 <option value="asc">낮은 금액순</option>
                 <option value="desc">높은 금액순</option>
             </select>
-            <button onclick="searchWithFilter()">검색하기</button>
+            <button onclick="getProducts()">검색하기</button>
         </div>
 
-        <div id="productContainer">
+        <div id="products">
             <!-- Products will be dynamically added here -->
         </div>
     </main>
 
-    <script>
-        const pageSize = 4; // Number of products to load per page
-        let page = 1; // Current page
-        let isLoading = false; // Flag to track if products are being loaded
+<script>
+    const pageSize = 4; // Number of products to load per page
+    let page = 1; // Current page
+    let isLoading = false; // Flag to track if products are being loaded
 
-        function searchWithFilter() {
-            // Clearing the existing products
-            const productContainer = document.getElementById('productContainer');
-            productContainer.innerHTML = '';
-            page = 1;
-            
-            try {
-                fetchProductWithFilter()
-            } catch (err) {
-                console.log(err)
-            }
-            
+    function getProducts() {
+        const productContainer = document.getElementById('products');
+        productContainer.innerHTML = '';
+        page = 1;
+        
+        try {
+            fetch()
+        } catch (err) {
+            console.log(err)
         }
+    }
 
-        // Function to filter the products
-        function fetchProductWithFilter() {
-            // const loader = document.getElementById('loader');
-            // loader.style.display = 'block';
+    function fetch() {
+        const search = document.getElementById('search');
+        const category = document.getElementById('category');
+        const sort = document.getElementById('sort');
 
-            const searchInput = document.getElementById('searchInput');
-            const categorySelect = document.getElementById('categorySelect');
-            const sortSelect = document.getElementById('sortSelect');
+        fetch('product.json')
+            .then(response => response.json())
+            .then(data => {
 
-            const keyword = searchInput.value.toLowerCase();
-            const category = categorySelect.value.toLowerCase();
-            const sortOption = sortSelect.value.toLowerCase();
+                let products = data.products.filter(product =>
+                    (product.title.includes(keyword) || product.category.toLowerCase().includes(keyword)) && product.category.includes(category)
+                );
 
-            fetch('product.json')
-                .then(response => response.json())
-                .then(data => {
-
-                    // Filtering the products based on keyword and category
-                    let filteredProducts = data.products.filter(product =>
-                        (product.title.toLowerCase().includes(keyword) || product.category.toLowerCase().includes(keyword)) && product.category.toLowerCase().includes(category)
-                    );
-
-                    // Sorting the filtered products based on the sort option
-                    if (sortOption === 'price-asc') {
-                        filteredProducts.sort((a, b) => a.price - b.price);
-                    } else if (sortOption === 'price-desc') {
-                        filteredProducts.sort((a, b) => b.price - a.price);
-                    }
-
-                    // Calculate the starting index and ending index of products to load
-                    const products = filteredProducts;
-                    const startIndex = (page - 1) * pageSize;
-                    const endIndex = page * pageSize;
-                    // Check if there are more products to load
-                    if (startIndex < products.length) {
-                        // Slice the products array to get the products for the current page
-                        const thisPageProducts = products.slice(startIndex, endIndex);
-
-                        // Rendering the filtered and sorted products
-                        renderProducts(thisPageProducts);
-                    }
-
-                    isLoading = false;
-                    // loader.style.display = 'none';
-
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-
-        // Function to render the products
-        function renderProducts(products) {
-            const productContainer = document.getElementById('productContainer');
-
-            products.forEach(product => {
-                const productTile = createProductTile(product);
-                productContainer.appendChild(productTile);
-            });
-        }
-
-        function createProductTile(product) {
-            const tile = document.createElement('div');
-            tile.classList.add('product');
-
-            const image = document.createElement('img');
-            image.src = product.image;
-            tile.appendChild(image);
-
-            // const title = document.createElement('h3');
-            // title.textContent = product.title;
-            // tile.appendChild(title);
-            //
-            // const price = document.createElement('p');
-            // price.textContent = `$${product.price}`;
-            // tile.appendChild(price);
-
-            tile.addEventListener('click', () => {
-                toggleProductInfo(tile, product);
-            });
-
-            return tile;
-        }
-
-        // Function to toggle product information
-        function toggleProductInfo(tile, product) {
-            const description = document.createElement('div');
-            description.classList.add('product-info');
-
-            const title = document.createElement('h3');
-            title.textContent = product.title;
-            description.appendChild(title);
-
-            // const image = document.createElement('img');
-            // image.src = product.image;
-            // description.appendChild(image);
-
-            const price = document.createElement('p');
-            price.textContent = `$${product.price}`;
-            description.appendChild(price);
-
-            const descriptionText = document.createElement('p');
-            descriptionText.textContent = product.description;
-            description.appendChild(descriptionText);
-
-            if (tile.classList.contains('active')) {
-                tile.classList.remove('active');
-                tile.removeChild(tile.lastChild);
-            } else {
-                const activeTile = document.querySelector('.product.active');
-                if (activeTile) {
-                    activeTile.classList.remove('active');
-                    activeTile.removeChild(activeTile.lastChild);
+                if (sort === 'price-asc') {
+                    products.sort((a, b) => a.price - b.price);
+                } else if (sort === 'price-desc') {
+                    products.sort((a, b) => b.price - a.price);
                 }
 
-                tile.classList.add('active');
-                tile.appendChild(description);
+                const start = (page - 1) * pageSize;
+                const end = page * pageSize;
+
+                if (startIndex < products.length) {
+                    const thisPageProducts = products.slice(startIndex, endIndex);
+                    renderProducts(thisPageProducts);
+                }
+
+                isLoading = false;
+            })
+            .catch((err) => console.log(err));
+    }
+
+
+    function renderProducts(products) {
+        const productInfos = document.getElementById('products');
+
+        products.forEach(product => {
+            const productTile = createProductTile(product);
+            productInfos.appendChild(productTile);
+        });
+    }
+
+    function createProductTile(product) {
+        const tile = document.createElement('div');
+        tile.classList.add('product');
+
+        const image = document.createElement('img');
+        image.src = product.image;
+        tile.appendChild(image);
+
+        tile.addEventListener('click', () => {
+            toggleProductInfo(tile, product);
+        });
+
+        return tile;
+    }
+
+    function toggleProductInfo(tile, product) {
+        const description = document.createElement('div');
+        description.classList.add('product-info');
+
+        const title = document.createElement('h3');
+        title.textContent = product.title;
+        description.appendChild(title);
+
+        // const image = document.createElement('img');
+        // image.src = product.image;
+        // description.appendChild(image);
+
+        const price = document.createElement('p');
+        price.textContent = `$${product.price}`;
+        description.appendChild(price);
+
+        const descriptionText = document.createElement('p');
+        descriptionText.textContent = product.description;
+        description.appendChild(descriptionText);
+
+        if (tile.classList.contains('active')) {
+            tile.classList.remove('active');
+            tile.removeChild(tile.lastChild);
+        } else {
+            const activeTile = document.querySelector('.product.active');
+            if (activeTile) {
+                activeTile.classList.remove('active');
+                activeTile.removeChild(activeTile.lastChild);
             }
+
+            tile.classList.add('active');
+            tile.appendChild(description);
         }
+    }
 
-        // Function to check if scrolling near the bottom of the page
-        function handleScroll() {
-            if (isLoading) return;
+    function infiniteScroll() {
+        if (isLoading) return;
 
-            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
-            if (scrollTop + clientHeight >= scrollHeight - 100) {
-                isLoading = true;
-                page++;
-                fetchProductWithFilter();
-            }
+        if (scrollTop + clientHeight >= scrollHeight - 100) {
+            isLoading = true;
+            page += 1;
+            fetch();
         }
+    }
 
-        // Event listener for scrolling
-        window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', infiniteScroll);
 
-        // Fetch the initial set of products
-        fetchProductWithFilter();
-    </script>
+    fetch();
+</script>
         
 </body>
 </html>
