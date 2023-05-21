@@ -49,14 +49,13 @@
         </div>
 
         <div id="products">
-            <!-- Products will be dynamically added here -->
+            
         </div>
     </main>
 
 <script>
-    const pageSize = 4; // Number of products to load per page
-    let page = 1; // Current page
-    let isLoading = false; // Flag to track if products are being loaded
+    const pageSize = 4;
+    let page = 1;
 
     function getProducts() {
         const productContainer = document.getElementById('products');
@@ -64,13 +63,13 @@
         page = 1;
         
         try {
-            fetch()
+            fetchProduct()
         } catch (err) {
             console.log(err)
         }
     }
 
-    function fetch() {
+    function fetchProduct() {
         const search = document.getElementById('search');
         const category = document.getElementById('category');
         const sort = document.getElementById('sort');
@@ -80,7 +79,7 @@
             .then(data => {
 
                 let products = data.products.filter(product =>
-                    (product.title.includes(keyword) || product.category.toLowerCase().includes(keyword)) && product.category.includes(category)
+                    (product.title.includes(search) || product.category.toLowerCase().includes(search)) && product.category.includes(category)
                 );
 
                 if (sort === 'price-asc') {
@@ -94,12 +93,10 @@
                 const start = (page - 1) * pageSize;
                 const end = page * pageSize;
 
-                if (startIndex < newProducts.length) {
-                    const thisPageProducts = newProducts.slice(startIndex, endIndex);
+                if (start < newProducts.length) {
+                    const thisPageProducts = newProducts.slice(start, end);
                     renderProducts(thisPageProducts);
                 }
-
-                isLoading = false;
             })
             .catch((err) => console.log(err));
     }
@@ -170,15 +167,14 @@
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
         if (scrollTop + clientHeight >= scrollHeight - 100) {
-            isLoading = true;
             page += 1;
-            fetch();
+            fetchProduct();
         }
     }
 
     window.addEventListener('scroll', infiniteScroll);
 
-    fetch();
+    fetchProduct();
 </script>
         
 </body>
